@@ -8,6 +8,8 @@ import com.udacity.vehicles.domain.car.CarRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 /**
@@ -65,22 +67,17 @@ public class CarService {
          * Note: The Location class file also uses @transient for the address,
          * meaning the Maps service needs to be called each time for the address.
          */
-    	Car car = new Car();
     	
-    	try { 
-    		car = this.findById(id);
+    	Optional<Car> optional = this.repository.findById(id);
+    	Car car = optional.orElseThrow(CarNotFoundException::new);
     		
-    		String price = pricingClient.getPrice(id);
-    		Location address = mapsClient.getAddress(car.getLocation());
-    		
-    		
-        	car.setPrice(price);
-        	car.setLocation(address);
-    	}
-    	catch(CarNotFoundException ex){
-    		throw new CarNotFoundException();
-        }
-    	
+		String price = pricingClient.getPrice(id);
+		Location address = mapsClient.getAddress(car.getLocation());
+		
+		
+    	car.setPrice(price);
+    	car.setLocation(address);
+
     	return car;
     	
     }
@@ -115,14 +112,11 @@ public class CarService {
          * DONE: Delete the car from the repository.
          */
     	
-    	try { 
-    		Car car = this.findById(id);
+    	Optional<Car> optional = this.repository.findById(id);
+    	Car car = optional.orElseThrow(CarNotFoundException::new);
     		
-    		repository.delete(car);
-    	}
-    	catch(CarNotFoundException ex){
-    		throw new CarNotFoundException();
-        }
+    	repository.delete(car);
+
     
     }
 }
