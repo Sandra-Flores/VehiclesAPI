@@ -33,6 +33,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
 
 /**
  * Implements testing of the CarController class.
@@ -96,6 +97,14 @@ public class CarControllerTest {
          *   the whole list of vehicles. This should utilize the car from `getCar()`
          *   below (the vehicle will be the first in the list).
          */
+    	Car car = getCar();
+        String payload = json.write(car).getJson();
+        RequestBuilder request = get("/cars")
+                                        .content(payload)
+                                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                                        .accept(MediaType.APPLICATION_JSON_UTF8);
+
+        mvc.perform(request).andExpect(status().isOk());
 
     }
 
@@ -109,6 +118,15 @@ public class CarControllerTest {
          * TODO: Add a test to check that the `get` method works by calling
          *   a vehicle by ID. This should utilize the car from `getCar()` below.
          */
+    	
+    	Car car = getCar();
+        String payload = json.write(car).getJson();
+        RequestBuilder request = get("/cars/" + car.getId())
+                                        .content(payload)
+                                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                                        .accept(MediaType.APPLICATION_JSON_UTF8);
+
+        mvc.perform(request).andExpect(status().isOk());
     }
 
     /**
@@ -122,6 +140,15 @@ public class CarControllerTest {
          *   when the `delete` method is called from the Car Controller. This
          *   should utilize the car from `getCar()` below.
          */
+    	
+    	Car car = getCar();
+        String payload = json.write(car).getJson();
+        RequestBuilder request = delete("/cars/" + car.getId())
+                                        .content(payload)
+                                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                                        .accept(MediaType.APPLICATION_JSON_UTF8);
+
+        mvc.perform(request).andExpect(status().isOk());
     }
 
     /**
