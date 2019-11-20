@@ -1,15 +1,16 @@
 package com.udacity.vehicles.service;
 
 import com.udacity.vehicles.client.maps.MapsClient;
+
 import com.udacity.vehicles.client.prices.PriceClient;
 import com.udacity.vehicles.domain.Location;
 import com.udacity.vehicles.domain.car.Car;
 import com.udacity.vehicles.domain.car.CarRepository;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -24,6 +25,7 @@ public class CarService {
 	private PriceClient pricingClient;
 	private MapsClient mapsClient;
 
+    @Autowired
     public CarService(CarRepository repository, PriceClient pricing, MapsClient maps) {
         /**
          * DONE: Add the Maps and Pricing Web Clients you create
@@ -115,7 +117,7 @@ public class CarService {
     	Optional<Car> optional = this.repository.findById(id);
     	Car car = optional.orElseThrow(CarNotFoundException::new);
     		
-    	repository.delete(car);
+    	this.repository.delete(car);
 
     
     }
