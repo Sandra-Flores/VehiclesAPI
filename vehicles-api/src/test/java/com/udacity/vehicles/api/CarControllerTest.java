@@ -2,9 +2,11 @@ package com.udacity.vehicles.api;
 
 
 import static org.mockito.ArgumentMatchers.any;
+
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -124,6 +126,30 @@ public class CarControllerTest {
                                         .accept(MediaType.APPLICATION_JSON_UTF8);
 
         mvc.perform(request).andExpect(status().isOk());
+    }
+    
+    /**
+     * Tests the read operation for a single car by ID.
+     * @throws Exception if the read operation for a single car fails
+     */
+    @Test
+    public void updateCar() throws Exception {
+        /**
+         *   Test to check that the `put` method works by calling
+         *   a vehicle by ID. This should utilize the car from `getCar()` below.
+         */
+    	
+    	Car car = getCar();
+    	
+    	car.setCondition(Condition.NEW);
+    	
+        String payload = json.write(car).getJson();
+        RequestBuilder request = put("/cars/" + car.getId())
+                                        .content(payload)
+                                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                                        .accept(MediaType.APPLICATION_JSON_UTF8);
+
+        mvc.perform(request).andExpect(status().is2xxSuccessful());
     }
 
     /**
